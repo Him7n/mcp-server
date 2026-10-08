@@ -291,6 +291,9 @@ const schema: Record<string, any> = {
                   "$ref": "#/definitions/pipeline/steps/cd/HelmDeployStepNode_template"
                 },
                 {
+                  "$ref": "#/definitions/pipeline/steps/cd/HelmDryRunStepNode_template"
+                },
+                {
                   "$ref": "#/definitions/pipeline/steps/cd/HelmCanaryDeployStepNode_template"
                 },
                 {
@@ -538,6 +541,9 @@ const schema: Record<string, any> = {
                 },
                 {
                   "$ref": "#/definitions/pipeline/steps/common/SscaEnforcementStepNode_template"
+                },
+                {
+                  "$ref": "#/definitions/pipeline/steps/common/StoPolicyEnforcementStepNode_template"
                 },
                 {
                   "$ref": "#/definitions/pipeline/steps/common/EnforceAttestationStepNode_template"
@@ -936,6 +942,9 @@ const schema: Record<string, any> = {
                   "$ref": "#/definitions/pipeline/steps/cd/DownloadGcsStepNode_template"
                 },
                 {
+                  "$ref": "#/definitions/pipeline/steps/cd/DownloadNexusArtifactStepNode_template"
+                },
+                {
                   "$ref": "#/definitions/pipeline/steps/cd/DownloadHarnessStoreStepNode_template"
                 },
                 {
@@ -1257,6 +1266,9 @@ const schema: Record<string, any> = {
                 },
                 {
                   "$ref": "#/definitions/pipeline/stages/compositeloadtest/CompositeLoadTestStageNode_template"
+                },
+                {
+                  "$ref": "#/definitions/pipeline/stages/drtest/DRTestStageNode_template"
                 }
               ]
             },
@@ -2890,7 +2902,48 @@ const schema: Record<string, any> = {
                         "minLength": 1
                       }
                     ]
+                  },
+                  "deleteOldAsg": {
+                    "oneOf": [
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "(<\\+.+>.*)",
+                        "minLength": 1
+                      }
+                    ]
                   }
+                },
+                "if": {
+                  "properties": {
+                    "deleteOldAsg": {
+                      "const": true
+                    }
+                  },
+                  "required": [
+                    "deleteOldAsg"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "downsizeOldAsg": {
+                      "oneOf": [
+                        {
+                          "const": true
+                        },
+                        {
+                          "type": "string",
+                          "pattern": "(<\\+.+>.*)",
+                          "minLength": 1
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "downsizeOldAsg"
+                  ]
                 }
               }
             ],
@@ -2927,9 +2980,50 @@ const schema: Record<string, any> = {
                   }
                 ]
               },
+              "deleteOldAsg": {
+                "oneOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "(<\\+.+>.*)",
+                    "minLength": 1
+                  }
+                ]
+              },
               "description": {
                 "desc": "This is the description for AsgBlueGreenSwapServiceStepInfo"
               }
+            },
+            "if": {
+              "properties": {
+                "deleteOldAsg": {
+                  "const": true
+                }
+              },
+              "required": [
+                "deleteOldAsg"
+              ]
+            },
+            "then": {
+              "properties": {
+                "downsizeOldAsg": {
+                  "oneOf": [
+                    {
+                      "const": true
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "(<\\+.+>.*)",
+                      "minLength": 1
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "downsizeOldAsg"
+              ]
             }
           },
           "AsgShiftTrafficStepNode_template": {
@@ -3064,7 +3158,61 @@ const schema: Record<string, any> = {
                         "minLength": 1
                       }
                     ]
+                  },
+                  "deleteOldAsg": {
+                    "oneOf": [
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "(<\\+.+>.*)",
+                        "minLength": 1
+                      }
+                    ]
                   }
+                },
+                "if": {
+                  "properties": {
+                    "deleteOldAsg": {
+                      "const": true
+                    }
+                  },
+                  "required": [
+                    "deleteOldAsg"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "downsizeOldAsg": {
+                      "oneOf": [
+                        {
+                          "const": true
+                        },
+                        {
+                          "type": "string",
+                          "pattern": "(<\\+.+>.*)",
+                          "minLength": 1
+                        }
+                      ]
+                    },
+                    "weight": {
+                      "oneOf": [
+                        {
+                          "const": 100
+                        },
+                        {
+                          "type": "string",
+                          "pattern": "(<\\+.+>.*)",
+                          "minLength": 1
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "downsizeOldAsg",
+                    "weight"
+                  ]
                 }
               }
             ],
@@ -3074,9 +3222,63 @@ const schema: Record<string, any> = {
               "downsizeOldAsg"
             ],
             "properties": {
+              "deleteOldAsg": {
+                "oneOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "(<\\+.+>.*)",
+                    "minLength": 1
+                  }
+                ]
+              },
               "description": {
                 "desc": "This is the description for AsgShiftTrafficStepInfo"
               }
+            },
+            "if": {
+              "properties": {
+                "deleteOldAsg": {
+                  "const": true
+                }
+              },
+              "required": [
+                "deleteOldAsg"
+              ]
+            },
+            "then": {
+              "properties": {
+                "downsizeOldAsg": {
+                  "oneOf": [
+                    {
+                      "const": true
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "(<\\+.+>.*)",
+                      "minLength": 1
+                    }
+                  ]
+                },
+                "weight": {
+                  "oneOf": [
+                    {
+                      "const": 100
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "(<\\+.+>.*)",
+                      "minLength": 1
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "downsizeOldAsg",
+                "weight"
+              ]
             }
           },
           "AsgCanaryDeleteStepNode_template": {
@@ -4173,6 +4375,18 @@ const schema: Record<string, any> = {
                   "asgName": {
                     "type": "string"
                   },
+                  "deleteOldAsg": {
+                    "oneOf": [
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "(<\\+.+>.*)",
+                        "minLength": 1
+                      }
+                    ]
+                  },
                   "delegateSelectors": {
                     "oneOf": [
                       {
@@ -4207,6 +4421,35 @@ const schema: Record<string, any> = {
                       }
                     ]
                   }
+                },
+                "if": {
+                  "properties": {
+                    "deleteOldAsg": {
+                      "const": true
+                    }
+                  },
+                  "required": [
+                    "deleteOldAsg"
+                  ]
+                },
+                "then": {
+                  "properties": {
+                    "resizeStrategy": {
+                      "oneOf": [
+                        {
+                          "const": "resize_new_first"
+                        },
+                        {
+                          "type": "string",
+                          "pattern": "(<\\+.+>.*)",
+                          "minLength": 1
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "resizeStrategy"
+                  ]
                 }
               }
             ],
@@ -4220,6 +4463,18 @@ const schema: Record<string, any> = {
             "properties": {
               "asgName": {
                 "type": "string"
+              },
+              "deleteOldAsg": {
+                "oneOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "(<\\+.+>.*)",
+                    "minLength": 1
+                  }
+                ]
               },
               "delegateSelectors": {
                 "oneOf": [
@@ -4258,6 +4513,35 @@ const schema: Record<string, any> = {
               "description": {
                 "desc": "This is the description for AsgSetupStepInfo"
               }
+            },
+            "if": {
+              "properties": {
+                "deleteOldAsg": {
+                  "const": true
+                }
+              },
+              "required": [
+                "deleteOldAsg"
+              ]
+            },
+            "then": {
+              "properties": {
+                "resizeStrategy": {
+                  "oneOf": [
+                    {
+                      "const": "resize_new_first"
+                    },
+                    {
+                      "type": "string",
+                      "pattern": "(<\\+.+>.*)",
+                      "minLength": 1
+                    }
+                  ]
+                }
+              },
+              "required": [
+                "resizeStrategy"
+              ]
             }
           },
           "AsgPhasedDeployStepNode_template": {
@@ -15443,6 +15727,203 @@ const schema: Record<string, any> = {
             },
             "$schema": "http://json-schema.org/draft-07/schema#"
           },
+          "HelmDryRunStepNode_template": {
+            "title": "HelmDryRunStepNode_template",
+            "type": "object",
+            "required": [
+              "spec",
+              "type"
+            ],
+            "properties": {
+              "enforce": {
+                "$ref": "#/definitions/pipeline/common/PolicyConfig"
+              },
+              "failureStrategies": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/pipeline/common/FailureStrategyConfig"
+                    }
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "strategy": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StrategyConfig"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "timeout": {
+                "type": "string",
+                "pattern": "^(([1-9])+\\d+[s])|(((([1-9])+\\d*[mhwd])+([\\s]?\\d+[smhwd])*)|(.*<\\+.*>(?!.*\\.executionInput\\(\\)).*)|(^$))$"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "HelmDryRun"
+                ]
+              },
+              "when": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StepWhenCondition"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              }
+            },
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "HelmDryRun"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "spec": {
+                      "$ref": "#/definitions/pipeline/steps/cd/HelmDryRunStepInfo"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "HelmDryRunStepInfo": {
+            "title": "HelmDryRunStepInfo",
+            "allOf": [
+              {
+                "$ref": "#/definitions/pipeline/common/StepSpecType"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "delegateSelectors": {
+                    "oneOf": [
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "(<\\+.+>.*)",
+                        "minLength": 1
+                      }
+                    ]
+                  },
+                  "commandFlags": {
+                    "oneOf": [
+                      {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/definitions/pipeline/steps/cd/HelmManifestCommandFlag"
+                        }
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^<\\+input>((\\.)((executionInput\\(\\))|(allowedValues|selectOneFrom|selectManyFrom|default|regex)\\(.+?\\)))*$",
+                        "minLength": 1
+                      }
+                    ]
+                  },
+                  "encryptYamlOutput": {
+                    "oneOf": [
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "(<\\+.+>.*)",
+                        "minLength": 1
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "properties": {
+              "delegateSelectors": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "(<\\+.+>.*)",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "commandFlags": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/pipeline/steps/cd/HelmManifestCommandFlag"
+                    }
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>((\\.)((executionInput\\(\\))|(allowedValues|selectOneFrom|selectManyFrom|default|regex)\\(.+?\\)))*$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "encryptYamlOutput": {
+                "oneOf": [
+                  {
+                    "type": "boolean"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "(<\\+.+>.*)",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "environmentVariables": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/steps/common/ParameterFieldMapStringString"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>((\\.)((executionInput\\(\\))|(allowedValues|selectOneFrom|selectManyFrom|default|regex)\\(.+?\\)))*$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "description": {
+                "desc": "This is the description for HelmDryRunStepInfo"
+              }
+            }
+          },
           "HelmCanaryDeployStepNode_template": {
             "title": "HelmCanaryDeployStepNode_template",
             "type": "object",
@@ -24638,6 +25119,22 @@ const schema: Record<string, any> = {
               "degradedStateTimeout": {
                 "type": "string",
                 "pattern": "^(([1-9])+\\d+[s])|(((([1-9])+\\d*[mhwd])+([\\s]?\\d+[smhwd])*)|(.*<\\+.*>(?!.*\\.executionInput\\(\\)).*)|(^$))$"
+              },
+              "successCriteria": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "syncInitiated",
+                      "syncSucceeded"
+                    ]
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "(<\\+.+>.*)",
+                    "minLength": 1
+                  }
+                ]
               }
             },
             "$schema": "http://json-schema.org/draft-07/schema#",
@@ -24650,6 +25147,53 @@ const schema: Record<string, any> = {
                   "degradedStateTimeout": [
                     "waitTillHealthy"
                   ]
+                }
+              },
+              {
+                "if": {
+                  "required": [
+                    "successCriteria"
+                  ],
+                  "properties": {
+                    "successCriteria": {
+                      "const": "syncInitiated"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "waitTillHealthy": {
+                      "not": {
+                        "enum": [
+                          true,
+                          "true"
+                        ]
+                      }
+                    },
+                    "failOnTimeout": {
+                      "not": {
+                        "const": true
+                      }
+                    },
+                    "showResourceProgress": {
+                      "not": {
+                        "const": true
+                      }
+                    },
+                    "autoPromoteRolloutBehavior": {
+                      "not": {
+                        "enum": [
+                          "promote-full",
+                          "resume"
+                        ]
+                      }
+                    },
+                    "degradedStateTimeout": {
+                      "not": {
+                        "pattern": "^\\d"
+                      }
+                    }
+                  }
                 }
               },
               {
@@ -25109,6 +25653,22 @@ const schema: Record<string, any> = {
                     "minLength": 1
                   }
                 ]
+              },
+              "successCriteria": {
+                "oneOf": [
+                  {
+                    "type": "string",
+                    "enum": [
+                      "syncInitiated",
+                      "syncSucceeded"
+                    ]
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "(<\\+.+>.*)",
+                    "minLength": 1
+                  }
+                ]
               }
             },
             "$schema": "http://json-schema.org/draft-07/schema#",
@@ -25118,6 +25678,35 @@ const schema: Record<string, any> = {
                   "failOnTimeout": [
                     "waitTillHealthy"
                   ]
+                }
+              },
+              {
+                "if": {
+                  "required": [
+                    "successCriteria"
+                  ],
+                  "properties": {
+                    "successCriteria": {
+                      "const": "syncInitiated"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "waitTillHealthy": {
+                      "not": {
+                        "enum": [
+                          true,
+                          "true"
+                        ]
+                      }
+                    },
+                    "failOnTimeout": {
+                      "not": {
+                        "const": true
+                      }
+                    }
+                  }
                 }
               }
             ],
@@ -33477,6 +34066,327 @@ const schema: Record<string, any> = {
               }
             },
             "description": "Downloads files from Google Cloud Storage (GCS) bucket.\n\nExample YAML:\n```yaml\n- step:\n    type: DownloadGcs\n    name: DownloadGcs_1\n    identifier: DownloadGcs_1\n    spec:\n      connectorRef: account.GcpConnector\n      bucketName: my-gcs-bucket\n      filePath: path/to/file.yaml\n      downloadPath: /harness/manifests\n    description: Downloads manifest from GCS bucket\n    timeout: 10m\n```\n"
+          },
+          "DownloadNexusArtifactStepNode_template": {
+            "title": "DownloadNexusArtifactStepNode_template",
+            "type": "object",
+            "required": [
+              "type"
+            ],
+            "properties": {
+              "enforce": {
+                "$ref": "#/definitions/pipeline/common/PolicyConfig"
+              },
+              "failureStrategies": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/pipeline/common/FailureStrategyConfig"
+                    }
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "strategy": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StrategyConfig"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "timeout": {
+                "type": "string",
+                "pattern": "^(([1-9])+\\d+[s])|(((([1-9])+\\d*[mhwd])+([\\s]?\\d+[smhwd])*)|(.*<\\+.*>(?!.*\\.executionInput\\(\\)).*)|(^$))$"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "DownloadNexusArtifact"
+                ]
+              },
+              "when": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StepWhenCondition"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              }
+            },
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "DownloadNexusArtifact"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "spec": {
+                      "$ref": "#/definitions/pipeline/steps/cd/DownloadNexusArtifactStepInfo"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "DownloadNexusArtifactStepInfo": {
+            "title": "DownloadNexusArtifactStepInfo",
+            "allOf": [
+              {
+                "$ref": "#/definitions/pipeline/common/StepSpecType"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "connectorRef": {
+                    "type": "string"
+                  },
+                  "delegateSelectors": {
+                    "oneOf": [
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "(<\\+.+>.*)",
+                        "minLength": 1
+                      }
+                    ]
+                  },
+                  "resources": {
+                    "$ref": "#/definitions/pipeline/common/ContainerResource"
+                  },
+                  "runAsUser": {
+                    "oneOf": [
+                      {
+                        "type": "integer",
+                        "format": "int32"
+                      },
+                      {
+                        "type": "string"
+                      }
+                    ]
+                  },
+                  "repository": {
+                    "type": "string"
+                  },
+                  "repositoryFormat": {
+                    "type": "string",
+                    "enum": [
+                      "raw",
+                      "maven",
+                      "npm",
+                      "nuget"
+                    ]
+                  },
+                  "downloadPath": {
+                    "type": "string"
+                  },
+                  "validateChecksum": {
+                    "oneOf": [
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^<\\+input>((\\.)((executionInput\\(\\))|(allowedValues|selectOneFrom|selectManyFrom|default|regex)\\(.+?\\)))*$",
+                        "minLength": 1
+                      }
+                    ]
+                  },
+                  "outputFilePathsContent": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "privileged": {
+                    "oneOf": [
+                      {
+                        "type": "boolean"
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^<\\+input>((\\.)((executionInput\\(\\))|(allowedValues|selectOneFrom|selectManyFrom|default|regex)\\(.+?\\)))*$",
+                        "minLength": 1
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "connectorRef",
+                  "repository",
+                  "repositoryFormat",
+                  "spec"
+                ]
+              },
+              {
+                "if": {
+                  "properties": {
+                    "repositoryFormat": {
+                      "const": "raw"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "spec": {
+                      "$ref": "#/definitions/pipeline/steps/cd/NexusDownloadRawSpec"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "repositoryFormat": {
+                      "const": "maven"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "spec": {
+                      "$ref": "#/definitions/pipeline/steps/cd/NexusDownloadMavenSpec"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "repositoryFormat": {
+                      "const": "npm"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "spec": {
+                      "$ref": "#/definitions/pipeline/steps/cd/NexusDownloadNpmSpec"
+                    }
+                  }
+                }
+              },
+              {
+                "if": {
+                  "properties": {
+                    "repositoryFormat": {
+                      "const": "nuget"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "spec": {
+                      "$ref": "#/definitions/pipeline/steps/cd/NexusDownloadNugetSpec"
+                    }
+                  }
+                }
+              }
+            ],
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "description": "Downloads an artifact from a Sonatype Nexus 3 repository using a Nexus connector.\n\nExample YAML:\n```yaml\n- step:\n    type: DownloadNexusArtifact\n    name: DownloadNexusArtifact_1\n    identifier: DownloadNexusArtifact_1\n    spec:\n      connectorRef: account.NexusConnector\n      repository: sdf-releases\n      repositoryFormat: raw\n      spec:\n        group: /com/example/sdf/1.4.2\n        artifactPath: sdf-bundle-1.4.2.zip\n      downloadPath: /harness/sdf\n      validateChecksum: true\n    timeout: 10m\n```\n"
+          },
+          "NexusDownloadRawSpec": {
+            "title": "NexusDownloadRawSpec",
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "required": [
+              "artifactPath",
+              "group"
+            ],
+            "properties": {
+              "artifactPath": {
+                "type": "string"
+              },
+              "group": {
+                "type": "string"
+              }
+            }
+          },
+          "NexusDownloadMavenSpec": {
+            "title": "NexusDownloadMavenSpec",
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "required": [
+              "artifactId",
+              "groupId",
+              "version"
+            ],
+            "properties": {
+              "artifactId": {
+                "type": "string"
+              },
+              "classifier": {
+                "type": "string"
+              },
+              "extension": {
+                "type": "string"
+              },
+              "groupId": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              }
+            }
+          },
+          "NexusDownloadNpmSpec": {
+            "title": "NexusDownloadNpmSpec",
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "required": [
+              "packageName",
+              "version"
+            ],
+            "properties": {
+              "packageName": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              }
+            }
+          },
+          "NexusDownloadNugetSpec": {
+            "title": "NexusDownloadNugetSpec",
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "required": [
+              "packageName",
+              "version"
+            ],
+            "properties": {
+              "packageName": {
+                "type": "string"
+              },
+              "version": {
+                "type": "string"
+              }
+            }
           },
           "DownloadHarnessStoreStepNode_template": {
             "title": "DownloadHarnessStoreStepNode_template",
@@ -42186,6 +43096,100 @@ const schema: Record<string, any> = {
               }
             ]
           },
+          "DownloadNexusArtifactStepNode": {
+            "title": "DownloadNexusArtifactStepNode",
+            "type": "object",
+            "required": [
+              "identifier",
+              "name",
+              "type"
+            ],
+            "properties": {
+              "description": {
+                "type": "string",
+                "desc": "This is the description for DownloadNexusArtifactStepNode"
+              },
+              "enforce": {
+                "$ref": "#/definitions/pipeline/common/PolicyConfig"
+              },
+              "failureStrategies": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/pipeline/common/FailureStrategyConfig"
+                    }
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "identifier": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
+              },
+              "name": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_0-9-.][-0-9a-zA-Z_\\s.]{0,127}$"
+              },
+              "strategy": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StrategyConfig"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "timeout": {
+                "type": "string",
+                "pattern": "^(([1-9])+\\d+[s])|(((([1-9])+\\d*[mhwd])+([\\s]?\\d+[smhwd])*)|(.*<\\+.*>(?!.*\\.executionInput\\(\\)).*)|(^$))$"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "DownloadNexusArtifact"
+                ]
+              },
+              "when": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StepWhenCondition"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              }
+            },
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "DownloadNexusArtifact"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "spec": {
+                      "$ref": "#/definitions/pipeline/steps/cd/DownloadNexusArtifactStepInfo"
+                    }
+                  }
+                }
+              }
+            ]
+          },
           "DownloadHarnessStoreStepNode": {
             "title": "DownloadHarnessStoreStepNode",
             "type": "object",
@@ -46051,6 +47055,101 @@ const schema: Record<string, any> = {
                   "properties": {
                     "spec": {
                       "$ref": "#/definitions/pipeline/steps/cd/HelmDeployStepInfo"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "HelmDryRunStepNode": {
+            "title": "HelmDryRunStepNode",
+            "type": "object",
+            "required": [
+              "identifier",
+              "name",
+              "spec",
+              "type"
+            ],
+            "properties": {
+              "description": {
+                "type": "string",
+                "desc": "This is the description for HelmDryRunStepNode"
+              },
+              "enforce": {
+                "$ref": "#/definitions/pipeline/common/PolicyConfig"
+              },
+              "failureStrategies": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/pipeline/common/FailureStrategyConfig"
+                    }
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "identifier": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
+              },
+              "name": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_0-9-.][-0-9a-zA-Z_\\s.]{0,127}$"
+              },
+              "strategy": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StrategyConfig"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "timeout": {
+                "type": "string",
+                "pattern": "^(([1-9])+\\d+[s])|(((([1-9])+\\d*[mhwd])+([\\s]?\\d+[smhwd])*)|(.*<\\+.*>(?!.*\\.executionInput\\(\\)).*)|(^$))$"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "HelmDryRun"
+                ]
+              },
+              "when": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StepWhenCondition"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              }
+            },
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "HelmDryRun"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "spec": {
+                      "$ref": "#/definitions/pipeline/steps/cd/HelmDryRunStepInfo"
                     }
                   }
                 }
@@ -65308,6 +66407,13 @@ const schema: Record<string, any> = {
                   "segmentType"
                 ],
                 "properties": {
+                  "changeRequest": {
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
+                  "changelog": {
+                    "description": "Legacy alias for changeRequest.",
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
                   "trafficType": {
                     "description": "FME Traffic Type name (case-sensitive)",
                     "oneOf": [
@@ -65894,6 +67000,13 @@ const schema: Record<string, any> = {
                   "environment"
                 ],
                 "properties": {
+                  "changeRequest": {
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
+                  "changelog": {
+                    "description": "Legacy alias for changeRequest.",
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
                   "segmentName": {
                     "description": "Name of the rule-based segment to configure",
                     "oneOf": [
@@ -66221,6 +67334,13 @@ const schema: Record<string, any> = {
                   "name"
                 ],
                 "properties": {
+                  "changeRequest": {
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
+                  "changelog": {
+                    "description": "Legacy alias for changeRequest.",
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
                   "name": {
                     "oneOf": [
                       {
@@ -66340,6 +67460,13 @@ const schema: Record<string, any> = {
                   "name"
                 ],
                 "properties": {
+                  "changeRequest": {
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
+                  "changelog": {
+                    "description": "Legacy alias for changeRequest.",
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
                   "name": {
                     "oneOf": [
                       {
@@ -66450,6 +67577,13 @@ const schema: Record<string, any> = {
                   "limit"
                 ],
                 "properties": {
+                  "changeRequest": {
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
+                  "changelog": {
+                    "description": "Legacy alias for changeRequest.",
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
                   "flagName": {
                     "oneOf": [
                       {
@@ -66744,6 +67878,13 @@ const schema: Record<string, any> = {
                   "allocation"
                 ],
                 "properties": {
+                  "changeRequest": {
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
+                  "changelog": {
+                    "description": "Legacy alias for changeRequest.",
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
                   "flagName": {
                     "oneOf": [
                       {
@@ -66907,6 +68048,13 @@ const schema: Record<string, any> = {
                   "treatments"
                 ],
                 "properties": {
+                  "changeRequest": {
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
+                  "changelog": {
+                    "description": "Legacy alias for changeRequest.",
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
                   "flagName": {
                     "oneOf": [
                       {
@@ -67113,6 +68261,13 @@ const schema: Record<string, any> = {
                   "treatments"
                 ],
                 "properties": {
+                  "changeRequest": {
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
+                  "changelog": {
+                    "description": "Legacy alias for changeRequest.",
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
                   "flagName": {
                     "oneOf": [
                       {
@@ -67289,6 +68444,13 @@ const schema: Record<string, any> = {
                   "environment"
                 ],
                 "properties": {
+                  "changeRequest": {
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
+                  "changelog": {
+                    "description": "Legacy alias for changeRequest.",
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
                   "flagName": {
                     "oneOf": [
                       {
@@ -67409,6 +68571,13 @@ const schema: Record<string, any> = {
                   "enabled"
                 ],
                 "properties": {
+                  "changeRequest": {
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
+                  "changelog": {
+                    "description": "Legacy alias for changeRequest.",
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
                   "flagName": {
                     "oneOf": [
                       {
@@ -67539,6 +68708,13 @@ const schema: Record<string, any> = {
                   "environment"
                 ],
                 "properties": {
+                  "changeRequest": {
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
+                  "changelog": {
+                    "description": "Legacy alias for changeRequest.",
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
                   "flagName": {
                     "oneOf": [
                       {
@@ -67658,6 +68834,13 @@ const schema: Record<string, any> = {
                   "environment"
                 ],
                 "properties": {
+                  "changeRequest": {
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
+                  "changelog": {
+                    "description": "Legacy alias for changeRequest.",
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
                   "flagName": {
                     "oneOf": [
                       {
@@ -67778,6 +68961,13 @@ const schema: Record<string, any> = {
                   "treatments"
                 ],
                 "properties": {
+                  "changeRequest": {
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
+                  "changelog": {
+                    "description": "Legacy alias for changeRequest.",
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
                   "flagName": {
                     "oneOf": [
                       {
@@ -68269,6 +69459,13 @@ const schema: Record<string, any> = {
                   "treatments"
                 ],
                 "properties": {
+                  "changeRequest": {
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
+                  "changelog": {
+                    "description": "Legacy alias for changeRequest.",
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
                   "flagName": {
                     "oneOf": [
                       {
@@ -68453,6 +69650,13 @@ const schema: Record<string, any> = {
                   "operations"
                 ],
                 "properties": {
+                  "changeRequest": {
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
+                  "changelog": {
+                    "description": "Legacy alias for changeRequest.",
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
                   "flagName": {
                     "oneOf": [
                       {
@@ -68828,6 +70032,13 @@ const schema: Record<string, any> = {
                   "environment"
                 ],
                 "properties": {
+                  "changeRequest": {
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
+                  "changelog": {
+                    "description": "Legacy alias for changeRequest.",
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
                   "flagName": {
                     "description": "Feature flag name",
                     "oneOf": [
@@ -68978,6 +70189,13 @@ const schema: Record<string, any> = {
                   "instructions"
                 ],
                 "properties": {
+                  "changeRequest": {
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
+                  "changelog": {
+                    "description": "Legacy alias for changeRequest.",
+                    "$ref": "#/definitions/pipeline/steps/common/fme-common-changelog"
+                  },
                   "flagName": {
                     "oneOf": [
                       {
@@ -76915,6 +78133,132 @@ const schema: Record<string, any> = {
                 }
               }
             ]
+          },
+          "RiskScanStepNode": {
+            "title": "RiskScanStepNode",
+            "type": "object",
+            "required": [
+              "identifier",
+              "name",
+              "spec",
+              "type"
+            ],
+            "properties": {
+              "description": {
+                "type": "string",
+                "desc": "This is the description for RiskScanStepNode"
+              },
+              "enforce": {
+                "$ref": "#/definitions/pipeline/common/PolicyConfig"
+              },
+              "failureStrategies": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/pipeline/common/FailureStrategyConfig"
+                    }
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "identifier": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
+              },
+              "name": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_0-9-.][-0-9a-zA-Z_\\s.]{0,127}$"
+              },
+              "strategy": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StrategyConfig"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "timeout": {
+                "type": "string",
+                "pattern": "^(([1-9])+\\d+[s])|(((([1-9])+\\d*[mhwd])+([\\s]?\\d+[smhwd])*)|(.*<\\+.*>(?!.*\\.executionInput\\(\\)).*)|(^$))$"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "RiskScan"
+                ]
+              },
+              "when": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StepWhenCondition"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              }
+            },
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "RiskScan"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "spec": {
+                      "$ref": "#/definitions/pipeline/steps/resiliencetesting/RiskScanStepInfo"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "RiskScanStepInfo": {
+            "title": "RiskScanStepInfo",
+            "allOf": [
+              {
+                "$ref": "#/definitions/pipeline/common/StepSpecType"
+              },
+              {
+                "type": "object",
+                "required": [
+                  "scanMode"
+                ],
+                "properties": {
+                  "scanMode": {
+                    "oneOf": [
+                      {
+                        "type": "string",
+                        "enum": [
+                          "AI",
+                          "RiskAnalyzer"
+                        ]
+                      },
+                      {
+                        "$ref": "#/definitions/pipeline/steps/common/common-jexl"
+                      }
+                    ]
+                  }
+                }
+              }
+            ],
+            "$schema": "http://json-schema.org/draft-07/schema#"
           }
         },
         "common": {
@@ -77263,6 +78607,152 @@ const schema: Record<string, any> = {
               "policy",
               "source"
             ]
+          },
+          "StoPolicyEnforcementStepNode_template": {
+            "title": "StoPolicyEnforcementStepNode_template",
+            "type": "object",
+            "required": [
+              "spec"
+            ],
+            "properties": {
+              "enforce": {
+                "$ref": "#/definitions/pipeline/common/PolicyConfig"
+              },
+              "failureStrategies": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/pipeline/common/FailureStrategyConfig"
+                    }
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "strategy": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StrategyConfig"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "timeout": {
+                "type": "string",
+                "pattern": "^(([1-9])+\\d+[s])|(((([1-9])+\\d*[mhwd])+([\\s]?\\d+[smhwd])*)|(.*<\\+.*>(?!.*\\.executionInput\\(\\)).*)|(^$))$"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "StoPolicyEnforcement"
+                ]
+              },
+              "when": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StepWhenCondition"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              }
+            },
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "StoPolicyEnforcement"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "spec": {
+                      "$ref": "#/definitions/pipeline/steps/common/StoPolicyEnforcementStepInfo"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "StoPolicyEnforcementStepInfo": {
+            "title": "StoPolicyEnforcementStepInfo",
+            "allOf": [
+              {
+                "$ref": "#/definitions/pipeline/common/StepSpecType"
+              },
+              {
+                "type": "object",
+                "required": [
+                  "policySetIds"
+                ],
+                "properties": {
+                  "policySetIds": {
+                    "oneOf": [
+                      {
+                        "type": "array",
+                        "items": {
+                          "type": "string",
+                          "minLength": 1
+                        },
+                        "minItems": 1
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "(<\\+.+>.*)",
+                        "minLength": 1
+                      }
+                    ]
+                  },
+                  "orgId": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/definitions/pipeline/steps/common/string-without-jexl"
+                      },
+                      {
+                        "$ref": "#/definitions/pipeline/steps/common/common-jexl"
+                      }
+                    ]
+                  },
+                  "projectId": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/definitions/pipeline/steps/common/string-without-jexl"
+                      },
+                      {
+                        "$ref": "#/definitions/pipeline/steps/common/common-jexl"
+                      }
+                    ]
+                  },
+                  "policy_enforcement_execution_id": {
+                    "type": "string"
+                  },
+                  "targetName": {
+                    "type": "string"
+                  },
+                  "targetVariant": {
+                    "type": "string"
+                  },
+                  "productName": {
+                    "type": "string"
+                  }
+                }
+              }
+            ],
+            "$schema": "http://json-schema.org/draft-07/schema#"
           },
           "EnforceAttestationStepNode_template": {
             "title": "EnforceAttestationStepNode_template",
@@ -100005,6 +101495,36 @@ const schema: Record<string, any> = {
             "minLength": 1,
             "maxLength": 480
           },
+          "fme-common-changelog": {
+            "title": "fme-common-changelog",
+            "type": "object",
+            "description": "Optional changelog metadata (title/comment) forwarded to the FME backend as audit metadata for this change",
+            "properties": {
+              "title": {
+                "description": "Single-line changelog title",
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/steps/common/string-without-jexl"
+                  },
+                  {
+                    "$ref": "#/definitions/pipeline/steps/common/common-jexl"
+                  }
+                ]
+              },
+              "comment": {
+                "description": "Free-text changelog comment",
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/steps/common/string-without-jexl"
+                  },
+                  {
+                    "$ref": "#/definitions/pipeline/steps/common/common-jexl"
+                  }
+                ]
+              }
+            },
+            "$schema": "http://json-schema.org/draft-07/schema#"
+          },
           "fme-segment-common-segment-name": {
             "title": "fme-segment-common-segment-name",
             "type": "string",
@@ -101711,6 +103231,23 @@ const schema: Record<string, any> = {
                   "dbInstance",
                   "dbSchema"
                 ],
+                "oneOf": [
+                  {
+                    "required": [
+                      "tag"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "changeSetCount"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "changesetFQN"
+                    ]
+                  }
+                ],
                 "properties": {
                   "dbInstance": {
                     "type": "string"
@@ -101750,6 +103287,10 @@ const schema: Record<string, any> = {
                   "changeSetCount": {
                     "type": "integer",
                     "minimum": 1
+                  },
+                  "changesetFQN": {
+                    "type": "string",
+                    "minLength": 1
                   },
                   "delegateSelectors": {
                     "oneOf": [
@@ -107414,22 +108955,17 @@ const schema: Record<string, any> = {
                   {
                     "required": [
                       "tag"
-                    ],
-                    "not": {
-                      "required": [
-                        "changeSetCount"
-                      ]
-                    }
+                    ]
                   },
                   {
                     "required": [
                       "changeSetCount"
-                    ],
-                    "not": {
-                      "required": [
-                        "tag"
-                      ]
-                    }
+                    ]
+                  },
+                  {
+                    "required": [
+                      "changesetFQN"
+                    ]
                   }
                 ],
                 "properties": {
@@ -107468,6 +109004,10 @@ const schema: Record<string, any> = {
                   "changeSetCount": {
                     "type": "integer",
                     "minimum": 1
+                  },
+                  "changesetFQN": {
+                    "type": "string",
+                    "minLength": 1
                   },
                   "delegateSelectors": {
                     "oneOf": [
@@ -107561,22 +109101,17 @@ const schema: Record<string, any> = {
               {
                 "required": [
                   "tag"
-                ],
-                "not": {
-                  "required": [
-                    "changeSetCount"
-                  ]
-                }
+                ]
               },
               {
                 "required": [
                   "changeSetCount"
-                ],
-                "not": {
-                  "required": [
-                    "tag"
-                  ]
-                }
+                ]
+              },
+              {
+                "required": [
+                  "changesetFQN"
+                ]
               }
             ],
             "properties": {
@@ -107596,6 +109131,10 @@ const schema: Record<string, any> = {
               "changeSetCount": {
                 "type": "integer",
                 "minimum": 1
+              },
+              "changesetFQN": {
+                "type": "string",
+                "minLength": 1
               },
               "settings": {
                 "oneOf": [
@@ -110662,8 +112201,8 @@ const schema: Record<string, any> = {
               }
             ]
           },
-          "ArtifactVerificationStepNode": {
-            "title": "ArtifactVerificationStepNode",
+          "SscaAibomOrchestrationStepNode": {
+            "title": "SscaAibomOrchestrationStepNode",
             "type": "object",
             "required": [
               "identifier",
@@ -110673,7 +112212,7 @@ const schema: Record<string, any> = {
             "properties": {
               "description": {
                 "type": "string",
-                "desc": "This is the description for ArtifactVerificationStepNode"
+                "desc": "This is the description for SscaAibomOrchestrationStepNode"
               },
               "enforce": {
                 "$ref": "#/definitions/pipeline/common/PolicyConfig"
@@ -110720,7 +112259,7 @@ const schema: Record<string, any> = {
               "type": {
                 "type": "string",
                 "enum": [
-                  "SscaArtifactVerification"
+                  "SscaAibomOrchestration"
                 ]
               },
               "when": {
@@ -110742,33 +112281,32 @@ const schema: Record<string, any> = {
                 "if": {
                   "properties": {
                     "type": {
-                      "const": "SscaArtifactVerification"
+                      "const": "SscaAibomOrchestration"
                     }
                   }
                 },
                 "then": {
                   "properties": {
                     "spec": {
-                      "$ref": "#/definitions/pipeline/steps/common/ArtifactVerificationStepInfo"
+                      "$ref": "#/definitions/pipeline/steps/common/SscaAibomOrchestrationStepInfo"
                     }
                   }
                 }
               }
             ]
           },
-          "AiVerifyStepNode": {
-            "title": "AiVerifyStepNode",
+          "SscaComplianceStepNode": {
+            "title": "SscaComplianceStepNode",
             "type": "object",
             "required": [
               "identifier",
               "name",
-              "spec",
-              "type"
+              "spec"
             ],
             "properties": {
               "description": {
                 "type": "string",
-                "desc": "This is the description for AiVerifyStepNode"
+                "desc": "This is the description for SscaComplianceStepNode"
               },
               "enforce": {
                 "$ref": "#/definitions/pipeline/common/PolicyConfig"
@@ -110815,7 +112353,7 @@ const schema: Record<string, any> = {
               "type": {
                 "type": "string",
                 "enum": [
-                  "AiVerify"
+                  "SscaCompliance"
                 ]
               },
               "when": {
@@ -110837,14 +112375,202 @@ const schema: Record<string, any> = {
                 "if": {
                   "properties": {
                     "type": {
-                      "const": "AiVerify"
+                      "const": "SscaCompliance"
                     }
                   }
                 },
                 "then": {
                   "properties": {
                     "spec": {
-                      "$ref": "#/definitions/pipeline/steps/common/AiVerifyStepInfo"
+                      "$ref": "#/definitions/pipeline/steps/common/SscaComplianceStepInfo"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "SscaPrAttestationStepNode": {
+            "title": "SscaPrAttestationStepNode",
+            "type": "object",
+            "required": [
+              "identifier",
+              "name",
+              "spec"
+            ],
+            "properties": {
+              "description": {
+                "type": "string",
+                "desc": "This is the description for SscaPrAttestationStepNode"
+              },
+              "enforce": {
+                "$ref": "#/definitions/pipeline/common/PolicyConfig"
+              },
+              "failureStrategies": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/pipeline/common/FailureStrategyConfig"
+                    }
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "identifier": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
+              },
+              "name": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_0-9-.][-0-9a-zA-Z_\\s.]{0,127}$"
+              },
+              "strategy": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StrategyConfig"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "timeout": {
+                "type": "string",
+                "pattern": "^(([1-9])+\\d+[s])|(((([1-9])+\\d*[mhwd])+([\\s]?\\d+[smhwd])*)|(.*<\\+.*>(?!.*\\.executionInput\\(\\)).*)|(^$))$"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "SscaPrAttestation"
+                ]
+              },
+              "when": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StepWhenCondition"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              }
+            },
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "SscaPrAttestation"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "spec": {
+                      "$ref": "#/definitions/pipeline/steps/common/SscaPrAttestationStepInfo"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "SscaJunitAttestationStepNode": {
+            "title": "SscaJunitAttestationStepNode",
+            "type": "object",
+            "required": [
+              "identifier",
+              "name",
+              "spec"
+            ],
+            "properties": {
+              "description": {
+                "type": "string",
+                "desc": "This is the description for SscaJunitAttestationStepNode"
+              },
+              "enforce": {
+                "$ref": "#/definitions/pipeline/common/PolicyConfig"
+              },
+              "failureStrategies": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/pipeline/common/FailureStrategyConfig"
+                    }
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "identifier": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
+              },
+              "name": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_0-9-.][-0-9a-zA-Z_\\s.]{0,127}$"
+              },
+              "strategy": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StrategyConfig"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "timeout": {
+                "type": "string",
+                "pattern": "^(([1-9])+\\d+[s])|(((([1-9])+\\d*[mhwd])+([\\s]?\\d+[smhwd])*)|(.*<\\+.*>(?!.*\\.executionInput\\(\\)).*)|(^$))$"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "SscaJunitAttestation"
+                ]
+              },
+              "when": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StepWhenCondition"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              }
+            },
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "SscaJunitAttestation"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "spec": {
+                      "$ref": "#/definitions/pipeline/steps/common/SscaJunitAttestationStepInfo"
                     }
                   }
                 }
@@ -110939,6 +112665,288 @@ const schema: Record<string, any> = {
                   "properties": {
                     "spec": {
                       "$ref": "#/definitions/pipeline/steps/common/SlsaVerificationStepInfo"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "ProvenanceStepNode": {
+            "title": "ProvenanceStepNode",
+            "type": "object",
+            "required": [
+              "identifier",
+              "name",
+              "spec"
+            ],
+            "properties": {
+              "description": {
+                "type": "string",
+                "desc": "This is the description for ProvenanceStepNode"
+              },
+              "enforce": {
+                "$ref": "#/definitions/pipeline/common/PolicyConfig"
+              },
+              "failureStrategies": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/pipeline/common/FailureStrategyConfig"
+                    }
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "identifier": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
+              },
+              "name": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_0-9-.][-0-9a-zA-Z_\\s.]{0,127}$"
+              },
+              "strategy": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StrategyConfig"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "timeout": {
+                "type": "string",
+                "pattern": "^(([1-9])+\\d+[s])|(((([1-9])+\\d*[mhwd])+([\\s]?\\d+[smhwd])*)|(.*<\\+.*>(?!.*\\.executionInput\\(\\)).*)|(^$))$"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "provenance"
+                ]
+              },
+              "when": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StepWhenCondition"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              }
+            },
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "provenance"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "spec": {
+                      "$ref": "#/definitions/pipeline/steps/common/ProvenanceStepInfo"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "ArtifactSigningStepNode": {
+            "title": "ArtifactSigningStepNode",
+            "type": "object",
+            "required": [
+              "identifier",
+              "name",
+              "spec"
+            ],
+            "properties": {
+              "description": {
+                "type": "string",
+                "desc": "This is the description for ArtifactSigningStepNode"
+              },
+              "enforce": {
+                "$ref": "#/definitions/pipeline/common/PolicyConfig"
+              },
+              "failureStrategies": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/pipeline/common/FailureStrategyConfig"
+                    }
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "identifier": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
+              },
+              "name": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_0-9-.][-0-9a-zA-Z_\\s.]{0,127}$"
+              },
+              "strategy": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StrategyConfig"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "timeout": {
+                "type": "string",
+                "pattern": "^(([1-9])+\\d+[s])|(((([1-9])+\\d*[mhwd])+([\\s]?\\d+[smhwd])*)|(.*<\\+.*>(?!.*\\.executionInput\\(\\)).*)|(^$))$"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "SscaArtifactSigning"
+                ]
+              },
+              "when": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StepWhenCondition"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              }
+            },
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "SscaArtifactSigning"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "spec": {
+                      "$ref": "#/definitions/pipeline/steps/common/ArtifactSigningStepInfo"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "ArtifactVerificationStepNode": {
+            "title": "ArtifactVerificationStepNode",
+            "type": "object",
+            "required": [
+              "identifier",
+              "name",
+              "spec"
+            ],
+            "properties": {
+              "description": {
+                "type": "string",
+                "desc": "This is the description for ArtifactVerificationStepNode"
+              },
+              "enforce": {
+                "$ref": "#/definitions/pipeline/common/PolicyConfig"
+              },
+              "failureStrategies": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/pipeline/common/FailureStrategyConfig"
+                    }
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "identifier": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
+              },
+              "name": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_0-9-.][-0-9a-zA-Z_\\s.]{0,127}$"
+              },
+              "strategy": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StrategyConfig"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "timeout": {
+                "type": "string",
+                "pattern": "^(([1-9])+\\d+[s])|(((([1-9])+\\d*[mhwd])+([\\s]?\\d+[smhwd])*)|(.*<\\+.*>(?!.*\\.executionInput\\(\\)).*)|(^$))$"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "SscaArtifactVerification"
+                ]
+              },
+              "when": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StepWhenCondition"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              }
+            },
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "SscaArtifactVerification"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "spec": {
+                      "$ref": "#/definitions/pipeline/steps/common/ArtifactVerificationStepInfo"
                     }
                   }
                 }
@@ -111133,6 +113141,195 @@ const schema: Record<string, any> = {
               }
             ]
           },
+          "StoPolicyEnforcementStepNode": {
+            "title": "StoPolicyEnforcementStepNode",
+            "type": "object",
+            "required": [
+              "identifier",
+              "name",
+              "spec"
+            ],
+            "properties": {
+              "description": {
+                "type": "string",
+                "desc": "This is the description for StoPolicyEnforcementStepNode"
+              },
+              "enforce": {
+                "$ref": "#/definitions/pipeline/common/PolicyConfig"
+              },
+              "failureStrategies": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/pipeline/common/FailureStrategyConfig"
+                    }
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "identifier": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
+              },
+              "name": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_0-9-.][-0-9a-zA-Z_\\s.]{0,127}$"
+              },
+              "strategy": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StrategyConfig"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "timeout": {
+                "type": "string",
+                "pattern": "^(([1-9])+\\d+[s])|(((([1-9])+\\d*[mhwd])+([\\s]?\\d+[smhwd])*)|(.*<\\+.*>(?!.*\\.executionInput\\(\\)).*)|(^$))$"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "StoPolicyEnforcement"
+                ]
+              },
+              "when": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StepWhenCondition"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              }
+            },
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "StoPolicyEnforcement"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "spec": {
+                      "$ref": "#/definitions/pipeline/steps/common/StoPolicyEnforcementStepInfo"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "AiVerifyStepNode": {
+            "title": "AiVerifyStepNode",
+            "type": "object",
+            "required": [
+              "identifier",
+              "name",
+              "spec",
+              "type"
+            ],
+            "properties": {
+              "description": {
+                "type": "string",
+                "desc": "This is the description for AiVerifyStepNode"
+              },
+              "enforce": {
+                "$ref": "#/definitions/pipeline/common/PolicyConfig"
+              },
+              "failureStrategies": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/pipeline/common/FailureStrategyConfig"
+                    }
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "identifier": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
+              },
+              "name": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_0-9-.][-0-9a-zA-Z_\\s.]{0,127}$"
+              },
+              "strategy": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StrategyConfig"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "timeout": {
+                "type": "string",
+                "pattern": "^(([1-9])+\\d+[s])|(((([1-9])+\\d*[mhwd])+([\\s]?\\d+[smhwd])*)|(.*<\\+.*>(?!.*\\.executionInput\\(\\)).*)|(^$))$"
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "AiVerify"
+                ]
+              },
+              "when": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StepWhenCondition"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              }
+            },
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "AiVerify"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "spec": {
+                      "$ref": "#/definitions/pipeline/steps/common/AiVerifyStepInfo"
+                    }
+                  }
+                }
+              }
+            ]
+          },
           "Platform": {
             "title": "Platform",
             "type": "object",
@@ -111194,100 +113391,6 @@ const schema: Record<string, any> = {
               }
             },
             "$schema": "http://json-schema.org/draft-07/schema#"
-          },
-          "SscaAibomOrchestrationStepNode": {
-            "title": "SscaAibomOrchestrationStepNode",
-            "type": "object",
-            "required": [
-              "identifier",
-              "name",
-              "spec"
-            ],
-            "properties": {
-              "description": {
-                "type": "string",
-                "desc": "This is the description for SscaAibomOrchestrationStepNode"
-              },
-              "enforce": {
-                "$ref": "#/definitions/pipeline/common/PolicyConfig"
-              },
-              "failureStrategies": {
-                "oneOf": [
-                  {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/definitions/pipeline/common/FailureStrategyConfig"
-                    }
-                  },
-                  {
-                    "type": "string",
-                    "pattern": "^<\\+input>$",
-                    "minLength": 1
-                  }
-                ]
-              },
-              "identifier": {
-                "type": "string",
-                "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
-              },
-              "name": {
-                "type": "string",
-                "pattern": "^[a-zA-Z_0-9-.][-0-9a-zA-Z_\\s.]{0,127}$"
-              },
-              "strategy": {
-                "oneOf": [
-                  {
-                    "$ref": "#/definitions/pipeline/common/StrategyConfig"
-                  },
-                  {
-                    "type": "string",
-                    "pattern": "^<\\+input>$",
-                    "minLength": 1
-                  }
-                ]
-              },
-              "timeout": {
-                "type": "string",
-                "pattern": "^(([1-9])+\\d+[s])|(((([1-9])+\\d*[mhwd])+([\\s]?\\d+[smhwd])*)|(.*<\\+.*>(?!.*\\.executionInput\\(\\)).*)|(^$))$"
-              },
-              "type": {
-                "type": "string",
-                "enum": [
-                  "SscaAibomOrchestration"
-                ]
-              },
-              "when": {
-                "oneOf": [
-                  {
-                    "$ref": "#/definitions/pipeline/common/StepWhenCondition"
-                  },
-                  {
-                    "type": "string",
-                    "pattern": "^<\\+input>$",
-                    "minLength": 1
-                  }
-                ]
-              }
-            },
-            "$schema": "http://json-schema.org/draft-07/schema#",
-            "allOf": [
-              {
-                "if": {
-                  "properties": {
-                    "type": {
-                      "const": "SscaAibomOrchestration"
-                    }
-                  }
-                },
-                "then": {
-                  "properties": {
-                    "spec": {
-                      "$ref": "#/definitions/pipeline/steps/common/SscaAibomOrchestrationStepInfo"
-                    }
-                  }
-                }
-              }
-            ]
           },
           "ActionStepNode": {
             "title": "ActionStepNode",
@@ -116665,194 +118768,6 @@ const schema: Record<string, any> = {
               }
             ]
           },
-          "ProvenanceStepNode": {
-            "title": "ProvenanceStepNode",
-            "type": "object",
-            "required": [
-              "identifier",
-              "name",
-              "spec"
-            ],
-            "properties": {
-              "description": {
-                "type": "string",
-                "desc": "This is the description for ProvenanceStepNode"
-              },
-              "enforce": {
-                "$ref": "#/definitions/pipeline/common/PolicyConfig"
-              },
-              "failureStrategies": {
-                "oneOf": [
-                  {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/definitions/pipeline/common/FailureStrategyConfig"
-                    }
-                  },
-                  {
-                    "type": "string",
-                    "pattern": "^<\\+input>$",
-                    "minLength": 1
-                  }
-                ]
-              },
-              "identifier": {
-                "type": "string",
-                "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
-              },
-              "name": {
-                "type": "string",
-                "pattern": "^[a-zA-Z_0-9-.][-0-9a-zA-Z_\\s.]{0,127}$"
-              },
-              "strategy": {
-                "oneOf": [
-                  {
-                    "$ref": "#/definitions/pipeline/common/StrategyConfig"
-                  },
-                  {
-                    "type": "string",
-                    "pattern": "^<\\+input>$",
-                    "minLength": 1
-                  }
-                ]
-              },
-              "timeout": {
-                "type": "string",
-                "pattern": "^(([1-9])+\\d+[s])|(((([1-9])+\\d*[mhwd])+([\\s]?\\d+[smhwd])*)|(.*<\\+.*>(?!.*\\.executionInput\\(\\)).*)|(^$))$"
-              },
-              "type": {
-                "type": "string",
-                "enum": [
-                  "provenance"
-                ]
-              },
-              "when": {
-                "oneOf": [
-                  {
-                    "$ref": "#/definitions/pipeline/common/StepWhenCondition"
-                  },
-                  {
-                    "type": "string",
-                    "pattern": "^<\\+input>$",
-                    "minLength": 1
-                  }
-                ]
-              }
-            },
-            "$schema": "http://json-schema.org/draft-07/schema#",
-            "allOf": [
-              {
-                "if": {
-                  "properties": {
-                    "type": {
-                      "const": "provenance"
-                    }
-                  }
-                },
-                "then": {
-                  "properties": {
-                    "spec": {
-                      "$ref": "#/definitions/pipeline/steps/common/ProvenanceStepInfo"
-                    }
-                  }
-                }
-              }
-            ]
-          },
-          "ArtifactSigningStepNode": {
-            "title": "ArtifactSigningStepNode",
-            "type": "object",
-            "required": [
-              "identifier",
-              "name",
-              "spec"
-            ],
-            "properties": {
-              "description": {
-                "type": "string",
-                "desc": "This is the description for ArtifactSigningStepNode"
-              },
-              "enforce": {
-                "$ref": "#/definitions/pipeline/common/PolicyConfig"
-              },
-              "failureStrategies": {
-                "oneOf": [
-                  {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/definitions/pipeline/common/FailureStrategyConfig"
-                    }
-                  },
-                  {
-                    "type": "string",
-                    "pattern": "^<\\+input>$",
-                    "minLength": 1
-                  }
-                ]
-              },
-              "identifier": {
-                "type": "string",
-                "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
-              },
-              "name": {
-                "type": "string",
-                "pattern": "^[a-zA-Z_0-9-.][-0-9a-zA-Z_\\s.]{0,127}$"
-              },
-              "strategy": {
-                "oneOf": [
-                  {
-                    "$ref": "#/definitions/pipeline/common/StrategyConfig"
-                  },
-                  {
-                    "type": "string",
-                    "pattern": "^<\\+input>$",
-                    "minLength": 1
-                  }
-                ]
-              },
-              "timeout": {
-                "type": "string",
-                "pattern": "^(([1-9])+\\d+[s])|(((([1-9])+\\d*[mhwd])+([\\s]?\\d+[smhwd])*)|(.*<\\+.*>(?!.*\\.executionInput\\(\\)).*)|(^$))$"
-              },
-              "type": {
-                "type": "string",
-                "enum": [
-                  "SscaArtifactSigning"
-                ]
-              },
-              "when": {
-                "oneOf": [
-                  {
-                    "$ref": "#/definitions/pipeline/common/StepWhenCondition"
-                  },
-                  {
-                    "type": "string",
-                    "pattern": "^<\\+input>$",
-                    "minLength": 1
-                  }
-                ]
-              }
-            },
-            "$schema": "http://json-schema.org/draft-07/schema#",
-            "allOf": [
-              {
-                "if": {
-                  "properties": {
-                    "type": {
-                      "const": "SscaArtifactSigning"
-                    }
-                  }
-                },
-                "then": {
-                  "properties": {
-                    "spec": {
-                      "$ref": "#/definitions/pipeline/steps/common/ArtifactSigningStepInfo"
-                    }
-                  }
-                }
-              }
-            ]
-          },
           "CortexCloudScanNode": {
             "title": "CortexCloudScanNode",
             "type": "object",
@@ -117328,100 +119243,6 @@ const schema: Record<string, any> = {
               }
             ]
           },
-          "SscaComplianceStepNode": {
-            "title": "SscaComplianceStepNode",
-            "type": "object",
-            "required": [
-              "identifier",
-              "name",
-              "spec"
-            ],
-            "properties": {
-              "description": {
-                "type": "string",
-                "desc": "This is the description for SscaComplianceStepNode"
-              },
-              "enforce": {
-                "$ref": "#/definitions/pipeline/common/PolicyConfig"
-              },
-              "failureStrategies": {
-                "oneOf": [
-                  {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/definitions/pipeline/common/FailureStrategyConfig"
-                    }
-                  },
-                  {
-                    "type": "string",
-                    "pattern": "^<\\+input>$",
-                    "minLength": 1
-                  }
-                ]
-              },
-              "identifier": {
-                "type": "string",
-                "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
-              },
-              "name": {
-                "type": "string",
-                "pattern": "^[a-zA-Z_0-9-.][-0-9a-zA-Z_\\s.]{0,127}$"
-              },
-              "strategy": {
-                "oneOf": [
-                  {
-                    "$ref": "#/definitions/pipeline/common/StrategyConfig"
-                  },
-                  {
-                    "type": "string",
-                    "pattern": "^<\\+input>$",
-                    "minLength": 1
-                  }
-                ]
-              },
-              "timeout": {
-                "type": "string",
-                "pattern": "^(([1-9])+\\d+[s])|(((([1-9])+\\d*[mhwd])+([\\s]?\\d+[smhwd])*)|(.*<\\+.*>(?!.*\\.executionInput\\(\\)).*)|(^$))$"
-              },
-              "type": {
-                "type": "string",
-                "enum": [
-                  "SscaCompliance"
-                ]
-              },
-              "when": {
-                "oneOf": [
-                  {
-                    "$ref": "#/definitions/pipeline/common/StepWhenCondition"
-                  },
-                  {
-                    "type": "string",
-                    "pattern": "^<\\+input>$",
-                    "minLength": 1
-                  }
-                ]
-              }
-            },
-            "$schema": "http://json-schema.org/draft-07/schema#",
-            "allOf": [
-              {
-                "if": {
-                  "properties": {
-                    "type": {
-                      "const": "SscaCompliance"
-                    }
-                  }
-                },
-                "then": {
-                  "properties": {
-                    "spec": {
-                      "$ref": "#/definitions/pipeline/steps/common/SscaComplianceStepInfo"
-                    }
-                  }
-                }
-              }
-            ]
-          },
           "HsaRepoScanStepNode": {
             "title": "HsaRepoScanStepNode",
             "type": "object",
@@ -117510,194 +119331,6 @@ const schema: Record<string, any> = {
                   "properties": {
                     "spec": {
                       "$ref": "#/definitions/pipeline/steps/common/HsaRepoScanStepInfo"
-                    }
-                  }
-                }
-              }
-            ]
-          },
-          "SscaPrAttestationStepNode": {
-            "title": "SscaPrAttestationStepNode",
-            "type": "object",
-            "required": [
-              "identifier",
-              "name",
-              "spec"
-            ],
-            "properties": {
-              "description": {
-                "type": "string",
-                "desc": "This is the description for SscaPrAttestationStepNode"
-              },
-              "enforce": {
-                "$ref": "#/definitions/pipeline/common/PolicyConfig"
-              },
-              "failureStrategies": {
-                "oneOf": [
-                  {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/definitions/pipeline/common/FailureStrategyConfig"
-                    }
-                  },
-                  {
-                    "type": "string",
-                    "pattern": "^<\\+input>$",
-                    "minLength": 1
-                  }
-                ]
-              },
-              "identifier": {
-                "type": "string",
-                "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
-              },
-              "name": {
-                "type": "string",
-                "pattern": "^[a-zA-Z_0-9-.][-0-9a-zA-Z_\\s.]{0,127}$"
-              },
-              "strategy": {
-                "oneOf": [
-                  {
-                    "$ref": "#/definitions/pipeline/common/StrategyConfig"
-                  },
-                  {
-                    "type": "string",
-                    "pattern": "^<\\+input>$",
-                    "minLength": 1
-                  }
-                ]
-              },
-              "timeout": {
-                "type": "string",
-                "pattern": "^(([1-9])+\\d+[s])|(((([1-9])+\\d*[mhwd])+([\\s]?\\d+[smhwd])*)|(.*<\\+.*>(?!.*\\.executionInput\\(\\)).*)|(^$))$"
-              },
-              "type": {
-                "type": "string",
-                "enum": [
-                  "SscaPrAttestation"
-                ]
-              },
-              "when": {
-                "oneOf": [
-                  {
-                    "$ref": "#/definitions/pipeline/common/StepWhenCondition"
-                  },
-                  {
-                    "type": "string",
-                    "pattern": "^<\\+input>$",
-                    "minLength": 1
-                  }
-                ]
-              }
-            },
-            "$schema": "http://json-schema.org/draft-07/schema#",
-            "allOf": [
-              {
-                "if": {
-                  "properties": {
-                    "type": {
-                      "const": "SscaPrAttestation"
-                    }
-                  }
-                },
-                "then": {
-                  "properties": {
-                    "spec": {
-                      "$ref": "#/definitions/pipeline/steps/common/SscaPrAttestationStepInfo"
-                    }
-                  }
-                }
-              }
-            ]
-          },
-          "SscaJunitAttestationStepNode": {
-            "title": "SscaJunitAttestationStepNode",
-            "type": "object",
-            "required": [
-              "identifier",
-              "name",
-              "spec"
-            ],
-            "properties": {
-              "description": {
-                "type": "string",
-                "desc": "This is the description for SscaJunitAttestationStepNode"
-              },
-              "enforce": {
-                "$ref": "#/definitions/pipeline/common/PolicyConfig"
-              },
-              "failureStrategies": {
-                "oneOf": [
-                  {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/definitions/pipeline/common/FailureStrategyConfig"
-                    }
-                  },
-                  {
-                    "type": "string",
-                    "pattern": "^<\\+input>$",
-                    "minLength": 1
-                  }
-                ]
-              },
-              "identifier": {
-                "type": "string",
-                "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
-              },
-              "name": {
-                "type": "string",
-                "pattern": "^[a-zA-Z_0-9-.][-0-9a-zA-Z_\\s.]{0,127}$"
-              },
-              "strategy": {
-                "oneOf": [
-                  {
-                    "$ref": "#/definitions/pipeline/common/StrategyConfig"
-                  },
-                  {
-                    "type": "string",
-                    "pattern": "^<\\+input>$",
-                    "minLength": 1
-                  }
-                ]
-              },
-              "timeout": {
-                "type": "string",
-                "pattern": "^(([1-9])+\\d+[s])|(((([1-9])+\\d*[mhwd])+([\\s]?\\d+[smhwd])*)|(.*<\\+.*>(?!.*\\.executionInput\\(\\)).*)|(^$))$"
-              },
-              "type": {
-                "type": "string",
-                "enum": [
-                  "SscaJunitAttestation"
-                ]
-              },
-              "when": {
-                "oneOf": [
-                  {
-                    "$ref": "#/definitions/pipeline/common/StepWhenCondition"
-                  },
-                  {
-                    "type": "string",
-                    "pattern": "^<\\+input>$",
-                    "minLength": 1
-                  }
-                ]
-              }
-            },
-            "$schema": "http://json-schema.org/draft-07/schema#",
-            "allOf": [
-              {
-                "if": {
-                  "properties": {
-                    "type": {
-                      "const": "SscaJunitAttestation"
-                    }
-                  }
-                },
-                "then": {
-                  "properties": {
-                    "spec": {
-                      "$ref": "#/definitions/pipeline/steps/common/SscaJunitAttestationStepInfo"
                     }
                   }
                 }
@@ -137070,6 +138703,9 @@ const schema: Record<string, any> = {
               "type": "string",
               "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
             },
+            "identities": {
+              "$ref": "#/definitions/pipeline/common/IdentitiesConfig"
+            },
             "name": {
               "type": "string",
               "pattern": "^[a-zA-Z_0-9-.][-0-9a-zA-Z_\\s.]{0,127}$"
@@ -137650,6 +139286,9 @@ const schema: Record<string, any> = {
                     "minLength": 1
                   }
                 ]
+              },
+              "identities": {
+                "$ref": "#/definitions/pipeline/common/IdentitiesConfig"
               },
               "skipInstances": {
                 "oneOf": [
@@ -138502,6 +140141,9 @@ const schema: Record<string, any> = {
                     "$ref": "#/definitions/pipeline/steps/cd/HelmDeployStepNode"
                   },
                   {
+                    "$ref": "#/definitions/pipeline/steps/cd/HelmDryRunStepNode"
+                  },
+                  {
                     "$ref": "#/definitions/pipeline/steps/cd/TasBGAppSetupStepNode"
                   },
                   {
@@ -138826,6 +140468,9 @@ const schema: Record<string, any> = {
                     "$ref": "#/definitions/pipeline/steps/resiliencetesting/ChaosFaultNode"
                   },
                   {
+                    "$ref": "#/definitions/pipeline/steps/resiliencetesting/RiskScanStepNode"
+                  },
+                  {
                     "$ref": "#/definitions/pipeline/steps/ci/AiEvalStepNode"
                   },
                   {
@@ -138857,6 +140502,9 @@ const schema: Record<string, any> = {
                   },
                   {
                     "$ref": "#/definitions/pipeline/steps/common/SscaEnforcementStepNode"
+                  },
+                  {
+                    "$ref": "#/definitions/pipeline/steps/common/StoPolicyEnforcementStepNode"
                   },
                   {
                     "$ref": "#/definitions/pipeline/steps/common/SscaOrchestrationStepNode"
@@ -138995,6 +140643,9 @@ const schema: Record<string, any> = {
                   },
                   {
                     "$ref": "#/definitions/pipeline/steps/cd/DownloadGcsStepNode"
+                  },
+                  {
+                    "$ref": "#/definitions/pipeline/steps/cd/DownloadNexusArtifactStepNode"
                   },
                   {
                     "$ref": "#/definitions/pipeline/steps/cd/DownloadHarnessStoreStepNode"
@@ -139392,6 +141043,9 @@ const schema: Record<string, any> = {
               "identifier": {
                 "type": "string",
                 "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
+              },
+              "identities": {
+                "$ref": "#/definitions/pipeline/common/IdentitiesConfig"
               },
               "name": {
                 "type": "string",
@@ -147602,6 +149256,9 @@ const schema: Record<string, any> = {
                 "type": "string",
                 "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
               },
+              "identities": {
+                "$ref": "#/definitions/pipeline/common/IdentitiesConfig"
+              },
               "name": {
                 "type": "string",
                 "pattern": "^[a-zA-Z_0-9-.][-0-9a-zA-Z_\\s.]{0,127}$"
@@ -148120,6 +149777,9 @@ const schema: Record<string, any> = {
                   }
                 ]
               },
+              "identities": {
+                "$ref": "#/definitions/pipeline/common/IdentitiesConfig"
+              },
               "strategy": {
                 "oneOf": [
                   {
@@ -148459,6 +150119,9 @@ const schema: Record<string, any> = {
                     "$ref": "#/definitions/pipeline/steps/cd/DownloadGcsStepNode"
                   },
                   {
+                    "$ref": "#/definitions/pipeline/steps/cd/DownloadNexusArtifactStepNode"
+                  },
+                  {
                     "$ref": "#/definitions/pipeline/steps/cd/DownloadHarnessStoreStepNode"
                   },
                   {
@@ -148646,6 +150309,42 @@ const schema: Record<string, any> = {
                   },
                   {
                     "$ref": "#/definitions/pipeline/steps/cd/AIVerifyNGStepNode"
+                  },
+                  {
+                    "$ref": "#/definitions/pipeline/steps/common/SscaEnforcementStepNode"
+                  },
+                  {
+                    "$ref": "#/definitions/pipeline/steps/common/SscaOrchestrationStepNode"
+                  },
+                  {
+                    "$ref": "#/definitions/pipeline/steps/common/SscaAibomOrchestrationStepNode"
+                  },
+                  {
+                    "$ref": "#/definitions/pipeline/steps/common/SscaComplianceStepNode"
+                  },
+                  {
+                    "$ref": "#/definitions/pipeline/steps/common/SscaPrAttestationStepNode"
+                  },
+                  {
+                    "$ref": "#/definitions/pipeline/steps/common/SscaJunitAttestationStepNode"
+                  },
+                  {
+                    "$ref": "#/definitions/pipeline/steps/common/SlsaVerificationStepNode"
+                  },
+                  {
+                    "$ref": "#/definitions/pipeline/steps/common/ProvenanceStepNode"
+                  },
+                  {
+                    "$ref": "#/definitions/pipeline/steps/common/ArtifactSigningStepNode"
+                  },
+                  {
+                    "$ref": "#/definitions/pipeline/steps/common/ArtifactVerificationStepNode"
+                  },
+                  {
+                    "$ref": "#/definitions/pipeline/steps/common/EnforceAttestationStepNode"
+                  },
+                  {
+                    "$ref": "#/definitions/pipeline/steps/common/DeployAttestationStepNode"
                   }
                 ]
               },
@@ -148753,6 +150452,9 @@ const schema: Record<string, any> = {
               "identifier": {
                 "type": "string",
                 "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
+              },
+              "identities": {
+                "$ref": "#/definitions/pipeline/common/IdentitiesConfig"
               },
               "name": {
                 "type": "string",
@@ -149262,6 +150964,9 @@ const schema: Record<string, any> = {
               "identifier": {
                 "type": "string",
                 "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
+              },
+              "identities": {
+                "$ref": "#/definitions/pipeline/common/IdentitiesConfig"
               },
               "name": {
                 "type": "string",
@@ -150440,6 +152145,9 @@ const schema: Record<string, any> = {
                     "$ref": "#/definitions/pipeline/steps/common/SscaEnforcementStepNode"
                   },
                   {
+                    "$ref": "#/definitions/pipeline/steps/common/StoPolicyEnforcementStepNode"
+                  },
+                  {
                     "$ref": "#/definitions/pipeline/steps/common/SscaOrchestrationStepNode"
                   },
                   {
@@ -151580,6 +153288,9 @@ const schema: Record<string, any> = {
                     "$ref": "#/definitions/pipeline/steps/cd/DownloadGcsStepNode"
                   },
                   {
+                    "$ref": "#/definitions/pipeline/steps/cd/DownloadNexusArtifactStepNode"
+                  },
+                  {
                     "$ref": "#/definitions/pipeline/steps/cd/DownloadHarnessStoreStepNode"
                   },
                   {
@@ -152577,6 +154288,9 @@ const schema: Record<string, any> = {
                   },
                   {
                     "$ref": "#/definitions/pipeline/steps/common/SscaEnforcementStepNode"
+                  },
+                  {
+                    "$ref": "#/definitions/pipeline/steps/common/StoPolicyEnforcementStepNode"
                   },
                   {
                     "$ref": "#/definitions/pipeline/steps/common/SscaOrchestrationStepNode"
@@ -154567,126 +156281,11 @@ const schema: Record<string, any> = {
             ]
           }
         },
-        "stages": {
-          "type": "object",
-          "title": "stages",
-          "properties": {
-            "parallel": {
-              "$ref": "#/definitions/pipeline/stages/ParallelStageElementConfig"
-            },
-            "insert": {
-              "$ref": "#/definitions/pipeline/stages/insert/InsertStageNode"
-            },
-            "stage": {
-              "description": "This is stage node. it can be of various types like CI, CD, etc.",
-              "oneOf": [
-                {
-                  "$ref": "#/definitions/pipeline/stages/iacm/IACMStageNode"
-                },
-                {
-                  "$ref": "#/definitions/pipeline/stages/cd/DeploymentStageNode"
-                },
-                {
-                  "$ref": "#/definitions/pipeline/stages/security/SecurityStageNode"
-                },
-                {
-                  "$ref": "#/definitions/pipeline/stages/ci/IntegrationStageNode"
-                },
-                {
-                  "$ref": "#/definitions/pipeline/stages/approval/ApprovalStageNode"
-                },
-                {
-                  "$ref": "#/definitions/pipeline/stages/custom/PipelineStageNode"
-                },
-                {
-                  "$ref": "#/definitions/pipeline/stages/custom/DynamicStageNode"
-                },
-                {
-                  "$ref": "#/definitions/pipeline/stages/custom/CustomStageNode"
-                },
-                {
-                  "$ref": "#/definitions/pipeline/stages/cf/FeatureFlagStageNode"
-                },
-                {
-                  "$ref": "#/definitions/pipeline/stages/template/TemplateStageNode"
-                },
-                {
-                  "$ref": "#/definitions/pipeline/stages/idp/IDPStageNode"
-                },
-                {
-                  "$ref": "#/definitions/pipeline/stages/drtest/DRTestStageNode"
-                },
-                {
-                  "$ref": "#/definitions/pipeline/stages/compositeloadtest/CompositeLoadTestStageNode"
-                }
-              ]
-            }
-          },
-          "$schema": "http://json-schema.org/draft-07/schema#"
-        },
-        "ParallelStageElementConfig": {
-          "type": "array",
-          "title": "ParallelStageElementConfig",
-          "items": {
-            "$ref": "#/definitions/pipeline/stages/stages"
-          },
-          "$schema": "http://json-schema.org/draft-07/schema#",
-          "properties": {
-            "description": {
-              "desc": "This is the description for ParallelStageElementConfig"
-            }
-          }
-        },
-        "insert": {
-          "InsertStageNode": {
-            "title": "InsertStageNode",
-            "type": "object",
-            "required": [
-              "identifier",
-              "name",
-              "stages"
-            ],
-            "properties": {
-              "identifier": {
-                "type": "string",
-                "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
-              },
-              "name": {
-                "type": "string",
-                "pattern": "^[a-zA-Z_][-0-9a-zA-Z_\\s]{0,127}$"
-              },
-              "stages": {
-                "oneOf": [
-                  {
-                    "type": "array",
-                    "items": {
-                      "$ref": "#/definitions/pipeline/stages/stages"
-                    },
-                    "maxItems": 2147483647,
-                    "minItems": 1
-                  },
-                  {
-                    "type": "string",
-                    "pattern": "(<\\+.+>.*)",
-                    "minLength": 1
-                  },
-                  {
-                    "type": "string",
-                    "pattern": "^[\\s]*$"
-                  }
-                ]
-              }
-            },
-            "$schema": "http://json-schema.org/draft-07/schema#"
-          }
-        },
         "drtest": {
-          "DRTestStageNode": {
-            "title": "DRTestStageNode",
+          "DRTestStageNode_template": {
+            "title": "DRTestStageNode_template",
             "type": "object",
             "required": [
-              "identifier",
-              "name",
               "type"
             ],
             "properties": {
@@ -154705,10 +156304,6 @@ const schema: Record<string, any> = {
                   }
                 ]
               },
-              "description": {
-                "type": "string",
-                "desc": "This is the description for DRTestStageNode"
-              },
               "failureStrategies": {
                 "oneOf": [
                   {
@@ -154723,14 +156318,6 @@ const schema: Record<string, any> = {
                     "minLength": 1
                   }
                 ]
-              },
-              "identifier": {
-                "type": "string",
-                "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
-              },
-              "name": {
-                "type": "string",
-                "pattern": "^[a-zA-Z_][-0-9a-zA-Z_\\s]{0,127}$"
               },
               "objective": {
                 "type": "string"
@@ -155168,6 +156755,258 @@ const schema: Record<string, any> = {
                 ]
               }
             ]
+          },
+          "DRTestStageNode": {
+            "title": "DRTestStageNode",
+            "type": "object",
+            "required": [
+              "identifier",
+              "name",
+              "type"
+            ],
+            "properties": {
+              "delegateSelectors": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "(<\\+.+>.*)",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "description": {
+                "type": "string",
+                "desc": "This is the description for DRTestStageNode"
+              },
+              "failureStrategies": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/pipeline/common/FailureStrategyConfig"
+                    }
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "identifier": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
+              },
+              "name": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_][-0-9a-zA-Z_\\s]{0,127}$"
+              },
+              "objective": {
+                "type": "string"
+              },
+              "strategy": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/StrategyConfig"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "tags": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "type": {
+                "type": "string",
+                "enum": [
+                  "DRTest"
+                ]
+              },
+              "variables": {
+                "type": "array",
+                "items": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/definitions/pipeline/common/NumberNGVariable"
+                    },
+                    {
+                      "$ref": "#/definitions/pipeline/common/SecretNGVariable"
+                    },
+                    {
+                      "$ref": "#/definitions/pipeline/common/StringNGVariable"
+                    }
+                  ]
+                }
+              },
+              "when": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/steps/custom/StageWhenCondition"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              },
+              "runMode": {
+                "oneOf": [
+                  {
+                    "$ref": "#/definitions/pipeline/common/RunModeConfig"
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^<\\+input>$",
+                    "minLength": 1
+                  }
+                ]
+              }
+            },
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "type": {
+                      "const": "DRTest"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "spec": {
+                      "$ref": "#/definitions/pipeline/stages/drtest/DRTestStageConfigImpl"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        },
+        "stages": {
+          "type": "object",
+          "title": "stages",
+          "properties": {
+            "parallel": {
+              "$ref": "#/definitions/pipeline/stages/ParallelStageElementConfig"
+            },
+            "insert": {
+              "$ref": "#/definitions/pipeline/stages/insert/InsertStageNode"
+            },
+            "stage": {
+              "description": "This is stage node. it can be of various types like CI, CD, etc.",
+              "oneOf": [
+                {
+                  "$ref": "#/definitions/pipeline/stages/iacm/IACMStageNode"
+                },
+                {
+                  "$ref": "#/definitions/pipeline/stages/cd/DeploymentStageNode"
+                },
+                {
+                  "$ref": "#/definitions/pipeline/stages/security/SecurityStageNode"
+                },
+                {
+                  "$ref": "#/definitions/pipeline/stages/ci/IntegrationStageNode"
+                },
+                {
+                  "$ref": "#/definitions/pipeline/stages/approval/ApprovalStageNode"
+                },
+                {
+                  "$ref": "#/definitions/pipeline/stages/custom/PipelineStageNode"
+                },
+                {
+                  "$ref": "#/definitions/pipeline/stages/custom/DynamicStageNode"
+                },
+                {
+                  "$ref": "#/definitions/pipeline/stages/custom/CustomStageNode"
+                },
+                {
+                  "$ref": "#/definitions/pipeline/stages/cf/FeatureFlagStageNode"
+                },
+                {
+                  "$ref": "#/definitions/pipeline/stages/template/TemplateStageNode"
+                },
+                {
+                  "$ref": "#/definitions/pipeline/stages/idp/IDPStageNode"
+                },
+                {
+                  "$ref": "#/definitions/pipeline/stages/drtest/DRTestStageNode"
+                },
+                {
+                  "$ref": "#/definitions/pipeline/stages/compositeloadtest/CompositeLoadTestStageNode"
+                }
+              ]
+            }
+          },
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "ParallelStageElementConfig": {
+          "type": "array",
+          "title": "ParallelStageElementConfig",
+          "items": {
+            "$ref": "#/definitions/pipeline/stages/stages"
+          },
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "properties": {
+            "description": {
+              "desc": "This is the description for ParallelStageElementConfig"
+            }
+          }
+        },
+        "insert": {
+          "InsertStageNode": {
+            "title": "InsertStageNode",
+            "type": "object",
+            "required": [
+              "identifier",
+              "name",
+              "stages"
+            ],
+            "properties": {
+              "identifier": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_][0-9a-zA-Z_]{0,127}$"
+              },
+              "name": {
+                "type": "string",
+                "pattern": "^[a-zA-Z_][-0-9a-zA-Z_\\s]{0,127}$"
+              },
+              "stages": {
+                "oneOf": [
+                  {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/pipeline/stages/stages"
+                    },
+                    "maxItems": 2147483647,
+                    "minItems": 1
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "(<\\+.+>.*)",
+                    "minLength": 1
+                  },
+                  {
+                    "type": "string",
+                    "pattern": "^[\\s]*$"
+                  }
+                ]
+              }
+            },
+            "$schema": "http://json-schema.org/draft-07/schema#"
           }
         }
       },
